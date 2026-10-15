@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Tienda virtual de miel y algarrobina natural de Sullana, Piura. Productos 100% naturales con compra online y seguimiento transparente.">
+  <title>MIEL & ALGARROBINA | Sabor natural de Sullana</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            honey: { DEFAULT: '#D4A017', light: '#F5B041', warm: '#F9E076' },
+            cream: { DEFAULT: '#FFF8E7', dark: '#F5EDD6' },
+            brown: { dark: '#3D2914', medium: '#5C4033' }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-cream">
+
+  <!-- ========== HEADER ========== -->
+  <header class="header-glass fixed top-0 left-0 right-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 md:h-20">
+        <!-- Logo -->
+        <a href="#inicio" class="flex items-center gap-3 group">
+          <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br from-honey to-honey-light flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
+            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.5 2 6 4.5 6 8c0 2.5 1.5 4.5 3 6v8h6v-8c1.5-1.5 3-3.5 3-6 0-3.5-2.5-6-6-6zm0 2c2.2 0 4 1.8 4 4 0 1.8-1 3.3-2.5 4.5L12 14l-1.5-1.5C9 11.3 8 9.8 8 8c0-2.2 1.8-4 4-4z"/></svg>
+          </div>
+          <div>
+            <h1 class="font-display text-base md:text-lg font-bold text-brown-dark leading-tight">MIEL & ALGARROBINA</h1>
+            <p class="text-xs text-amber-700 font-medium">Sabor natural de Sullana</p>
+          </div>
+        </a>
+
+        <!-- Desktop Nav -->
+        <nav class="hidden md:flex items-center gap-8">
+          <a href="#inicio" class="nav-link text-sm font-medium text-brown-dark hover:text-honey">Inicio</a>
+          <a href="#catalogo" class="nav-link text-sm font-medium text-brown-dark hover:text-honey">Catálogo</a>
+          <a href="#resenas" class="nav-link text-sm font-medium text-brown-dark hover:text-honey">Reseñas</a>
+          <a href="#nosotros" class="nav-link text-sm font-medium text-brown-dark hover:text-honey">Nosotros</a>
+        </nav>
+
+        <!-- Auth + Cart + Mobile toggle -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <div id="auth-guest" class="hidden sm:flex items-center gap-2">
+            <a href="login.html" class="px-3 py-2 text-sm font-semibold text-brown-dark hover:text-honey transition">Iniciar sesión</a>
+            <a href="registro.html" class="btn-primary px-4 py-2 rounded-xl text-sm font-semibold">Registrarse</a>
+          </div>
+          <div id="auth-user" class="hidden sm:flex items-center gap-2 auth-slot-hidden">
+            <span id="auth-greeting" class="text-sm font-semibold text-brown-dark whitespace-nowrap"></span>
+            <button id="auth-orders-btn" type="button" class="px-3 py-2 rounded-xl text-xs font-semibold border border-amber-200 bg-white hover:bg-amber-50 transition">Mis compras</button>
+            <button id="auth-logout-btn" type="button" class="px-3 py-2 rounded-xl text-xs font-semibold bg-brown-dark text-white hover:bg-brown-medium transition">Cerrar sesión</button>
+          </div>
+          <button id="cart-toggle" class="btn-cart relative p-2.5 rounded-xl bg-white border border-amber-200 hover:bg-amber-50 transition shadow-sm" aria-label="Abrir carrito">
+            <svg class="w-6 h-6 text-brown-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+            <span id="cart-badge" class="cart-badge" style="display:none">0</span>
+          </button>
+          <button id="mobile-menu-toggle" class="md:hidden p-2 rounded-lg hover:bg-amber-50 transition" aria-label="Menú" aria-expanded="false">
+            <svg class="w-6 h-6 text-brown-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Nav -->
+      <nav id="mobile-menu" class="mobile-menu md:hidden border-t border-amber-100">
+        <div class="py-4 space-y-1">
+          <a href="#inicio" class="block px-4 py-2.5 text-sm font-medium text-brown-dark hover:bg-amber-50 rounded-lg">Inicio</a>
+          <a href="#catalogo" class="block px-4 py-2.5 text-sm font-medium text-brown-dark hover:bg-amber-50 rounded-lg">Catálogo</a>
+          <a href="#resenas" class="block px-4 py-2.5 text-sm font-medium text-brown-dark hover:bg-amber-50 rounded-lg">Reseñas</a>
+          <a href="#nosotros" class="block px-4 py-2.5 text-sm font-medium text-brown-dark hover:bg-amber-50 rounded-lg">Nosotros</a>
+          <div id="mobile-auth-guest" class="px-4 pt-3 space-y-2 border-t border-amber-100 mt-2">
+            <a href="login.html" class="block py-2.5 text-sm font-semibold text-brown-dark">Iniciar sesión</a>
+            <a href="registro.html" class="btn-primary block text-center py-2.5 rounded-xl text-sm font-semibold">Registrarse</a>
+          </div>
+          <div id="mobile-auth-user" class="hidden px-4 pt-3 space-y-2 border-t border-amber-100 mt-2">
+            <p id="mobile-auth-greeting" class="text-sm font-semibold text-brown-dark"></p>
+            <button id="mobile-auth-orders" type="button" class="w-full text-left py-2.5 text-sm font-medium text-brown-dark">Mis compras</button>
+            <button id="mobile-auth-logout" type="button" class="w-full py-2.5 rounded-xl text-sm font-semibold bg-brown-dark text-white">Cerrar sesión</button>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ========== HERO ========== -->
+    <section id="inicio" class="hero-gradient relative pt-24 md:pt-28 pb-16 md:pb-24 overflow-hidden">
+      <div class="hero-blob w-72 h-72 bg-honey-warm top-10 -left-20"></div>
+      <div class="hero-blob w-96 h-96 bg-green-200 bottom-0 right-0"></div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+          <!-- Text -->
+          <div class="animate-fade-in-up">
+            <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/70 border border-amber-200 text-xs font-semibold text-amber-800 mb-6">
+              <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+              Productos 100% naturales de Sullana
+            </span>
+            <h2 class="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-brown-dark leading-tight mb-6">
+              Dulzura natural,<br>
+              <span class="text-transparent bg-clip-text bg-gradient-to-r from-honey to-amber-600">directo a tu hogar</span>
+            </h2>
+            <p class="text-lg text-brown-medium mb-4 leading-relaxed">
+              Descubre la esencia natural de Sullana en cada frasco.
+            </p>
+            <p class="text-gray-600 mb-8 leading-relaxed max-w-lg">
+              Compra miel y algarrobina de forma práctica y transparente. Nuestra tienda virtual está disponible a toda hora para que disfrutes lo mejor de Piura sin salir de casa.
+            </p>
+            <div class="flex flex-wrap gap-4">
+              <button data-scroll="#catalogo" class="btn-primary px-6 py-3 rounded-xl font-semibold text-sm">
+                Ver catálogo
+              </button>
+              <button data-scroll="#catalogo" class="btn-secondary px-6 py-3 rounded-xl font-semibold text-sm">
+                Comprar ahora
+              </button>
+            </div>
+            <!-- Trust badges -->
+            <div class="flex flex-wrap gap-6 mt-10 pt-8 border-t border-amber-200/50">
+              <div class="flex items-center gap-2 text-sm text-gray-600">
+                <svg class="w-5 h-5 text-honey" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                100% Natural
+              </div>
+              <div class="flex items-center gap-2 text-sm text-gray-600">
+                <svg class="w-5 h-5 text-honey" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/></svg>
+                Hecho en Sullana
+              </div>
+              <div class="flex items-center gap-2 text-sm text-gray-600">
+                <svg class="w-5 h-5 text-honey" fill="currentColor" viewBox="0 0 20 20"><path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/><path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V8h4.05a2.5 2.5 0 014.9 0H19a1 1 0 001-1V5a1 1 0 00-1-1H3z"/></svg>
+                Envío local
+              </div>
+            </div>
+          </div>
+
+          <!-- Visual composition -->
+          <div class="animate-fade-in-right relative">
+            <div class="hero-jar-group">
+              <!-- Decorative elements -->
+              <div class="decor-honey-drop animate-float" style="top:15%;left:10%"></div>
+              <div class="decor-honey-drop animate-float-delay" style="top:40%;right:8%;width:14px;height:20px"></div>
+              <svg class="decor-leaf animate-float" style="top:20%;right:15%;width:40px;height:40px" viewBox="0 0 24 24" fill="#7CB342"><path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1.06-2.44.94.5C9.81 18.17 12.26 17 17 17V8z"/></svg>
+              <svg class="decor-leaf animate-float-delay" style="bottom:25%;left:8%;width:32px;height:32px;transform:scaleX(-1)" viewBox="0 0 24 24" fill="#81C784"><path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1.06-2.44.94.5C9.81 18.17 12.26 17 17 17V8z"/></svg>
+
+              <!-- Jar 1 - Miel -->
+              <div class="hero-jar hero-jar-1 animate-float">
+                <div class="jar">
+                  <div class="jar-lid"></div>
+                  <div class="jar-body">
+                    <div class="jar-liquid jar-liquid-honey"></div>
+                    <div class="jar-label">Miel Sullana</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Jar 2 - Algarrobina -->
+              <div class="hero-jar hero-jar-2 animate-float-delay">
+                <div class="jar">
+                  <div class="jar-lid" style="background:linear-gradient(180deg,#5D4037,#3E2723)"></div>
+                  <div class="jar-body">
+                    <div class="jar-liquid jar-liquid-algarrobina"></div>
+                    <div class="jar-label">Algarrobina</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Jar 3 - Center -->
+              <div class="hero-jar hero-jar-3 animate-float" style="animation-delay:0.5s">
+                <div class="jar" style="width:80%">
+                  <div class="jar-lid"></div>
+                  <div class="jar-body">
+                    <div class="jar-liquid jar-liquid-honey" style="height:60%"></div>
+                    <div class="jar-label">Natural</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Glow ring -->
+              <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div class="w-64 h-64 rounded-full border-2 border-amber-200/30 animate-pulse-soft"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== CATÁLOGO ========== -->
+    <section id="catalogo" class="py-16 md:py-24 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <span class="text-honey font-semibold text-sm uppercase tracking-wider">Productos naturales</span>
+          <h2 class="font-display text-3xl md:text-4xl font-bold text-brown-dark mt-2 mb-4">Nuestro catálogo</h2>
+          <p class="text-gray-600 max-w-2xl mx-auto">Selecciona entre nuestra variedad de miel y algarrobina, elaborados con dedicación en Sullana.</p>
+        </div>
+
+        <!-- Filters -->
+        <div class="flex flex-wrap justify-center gap-3 mb-10">
+          <button class="filter-btn active px-5 py-2.5 rounded-full text-sm font-semibold border border-amber-200" data-filter="todos">Todos</button>
+          <button class="filter-btn px-5 py-2.5 rounded-full text-sm font-semibold border border-amber-200" data-filter="miel">Miel</button>
+          <button class="filter-btn px-5 py-2.5 rounded-full text-sm font-semibold border border-amber-200" data-filter="algarrobina">Algarrobina</button>
+        </div>
+
+        <!-- Product Grid: 4 cols desktop, 2 tablet, 1 mobile -->
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== RESEÑAS ========== -->
+    <section id="resenas" class="py-16 md:py-24 bg-gradient-to-b from-cream to-cream-dark">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
+          <div>
+            <span class="text-honey font-semibold text-sm uppercase tracking-wider">Testimonios</span>
+            <h2 class="font-display text-3xl md:text-4xl font-bold text-brown-dark mt-2">Lo que dicen nuestros clientes</h2>
+          </div>
+          <button id="open-review-modal" class="btn-primary px-6 py-3 rounded-xl font-semibold text-sm self-start md:self-auto">
+            ✏️ Escribir una reseña
+          </button>
+        </div>
+
+        <div id="reviews-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== NOSOTROS ========== -->
+    <section id="nosotros" class="py-16 md:py-24 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <span class="text-honey font-semibold text-sm uppercase tracking-wider">Nuestra historia</span>
+            <h2 class="font-display text-3xl md:text-4xl font-bold text-brown-dark mt-2 mb-6">Emprendimiento con sabor a Sullana</h2>
+            <p class="text-gray-600 leading-relaxed mb-6">
+              Somos un emprendimiento local que busca acercar los productos naturales de Sullana a más personas mediante una tienda virtual moderna y accesible. Creemos que la miel y la algarrobina de nuestra tierra merecen llegar a cada hogar.
+            </p>
+            <p class="text-gray-600 leading-relaxed">
+              Antes, nuestros productos se promocionaban principalmente por recomendaciones directas. Hoy, con esta plataforma, cualquier persona puede descubrirlos, comprarlos y hacer seguimiento de su pedido de forma transparente.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="about-feature bg-cream rounded-2xl p-6 border border-amber-100">
+              <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-honey-warm to-honey flex items-center justify-center mb-4">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+              </div>
+              <h3 class="font-semibold text-brown-dark mb-2">Producto natural</h3>
+              <p class="text-sm text-gray-600">Miel y algarrobina 100% naturales, sin aditivos artificiales.</p>
+            </div>
+            <div class="about-feature bg-cream rounded-2xl p-6 border border-amber-100">
+              <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-green-300 to-green-500 flex items-center justify-center mb-4">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              </div>
+              <h3 class="font-semibold text-brown-dark mb-2">Identidad local</h3>
+              <p class="text-sm text-gray-600">Orgullosamente elaborado en Sullana, Piura.</p>
+            </div>
+            <div class="about-feature bg-cream rounded-2xl p-6 border border-amber-100">
+              <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center mb-4">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+              </div>
+              <h3 class="font-semibold text-brown-dark mb-2">Compra sencilla</h3>
+              <p class="text-sm text-gray-600">Agrega al carrito, confirma y listo. Rápido y fácil.</p>
+            </div>
+            <div class="about-feature bg-cream rounded-2xl p-6 border border-amber-100">
+              <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center mb-4">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+              </div>
+              <h3 class="font-semibold text-brown-dark mb-2">Seguimiento transparente</h3>
+              <p class="text-sm text-gray-600">Consulta el estado de tu pedido en todo momento.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer-gradient text-white py-12 md:py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-3 gap-8 mb-10">
+        <div>
+          <h3 class="font-display text-xl font-bold mb-2">MIEL & ALGARROBINA</h3>
+          <p class="text-amber-200/80 text-sm">Sabor natural de Sullana</p>
+        </div>
+        <div>
+          <h4 class="font-semibold mb-4 text-amber-100">Enlaces</h4>
+          <nav class="flex flex-col gap-2">
+            <a href="#inicio" class="text-sm text-amber-200/70 hover:text-white transition">Inicio</a>
+            <a href="#catalogo" class="text-sm text-amber-200/70 hover:text-white transition">Catálogo</a>
+            <a href="#resenas" class="text-sm text-amber-200/70 hover:text-white transition">Reseñas</a>
+            <a href="login.html" class="text-sm text-amber-200/70 hover:text-white transition">Iniciar sesión</a>
+            <a href="admin.html" class="text-sm text-amber-200/70 hover:text-white transition">Administración</a>
+          </nav>
+        </div>
+        <div>
+          <h4 class="font-semibold mb-4 text-amber-100">Contacto</h4>
+          <p class="text-sm text-amber-200/70">Sullana, Piura — Perú</p>
+          <p class="text-sm text-amber-200/70 mt-1">Tienda virtual disponible 24/7</p>
+        </div>
+      </div>
+      <div class="border-t border-white/10 pt-8 text-center">
+        <p class="text-sm text-amber-200/60">© 2026 Miel & Algarrobina Sullana</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========== CART SIDEBAR ========== -->
+  <div id="cart-overlay" class="cart-overlay fixed inset-0 z-[60]"></div>
+  <aside id="cart-panel" class="cart-panel fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl z-[70] flex flex-col">
+    <div class="flex items-center justify-between p-5 border-b border-amber-100">
+      <h3 class="font-display text-xl font-bold text-brown-dark flex items-center gap-2">
+        <svg class="w-6 h-6 text-honey" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+        Tu carrito
+      </h3>
+      <button id="cart-close" class="p-2 rounded-lg hover:bg-amber-50 transition" aria-label="Cerrar carrito">
+        <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="flex-grow overflow-y-auto p-5">
+      <div id="cart-empty" class="empty-state">
+        <div class="empty-state-icon">🛒</div>
+        <p class="font-medium text-gray-500">Tu carrito está vacío</p>
+        <p class="text-sm text-gray-400 mt-1">Agrega productos del catálogo</p>
+      </div>
+      <div id="cart-items" class="space-y-3"></div>
+    </div>
+
+    <div id="cart-footer" class="hidden border-t border-amber-100 p-5 bg-cream/50">
+      <div class="space-y-2 mb-4">
+        <div class="flex justify-between text-sm text-gray-600">
+          <span>Subtotal</span>
+          <span id="cart-subtotal">S/ 0.00</span>
+        </div>
+        <div class="flex justify-between text-lg font-bold text-brown-dark">
+          <span>Total</span>
+          <span id="cart-total" class="text-amber-700">S/ 0.00</span>
+        </div>
+      </div>
+      <button id="confirm-order-btn" class="btn-primary w-full py-3.5 rounded-xl font-semibold text-sm">
+        Confirmar pedido
+      </button>
+    </div>
+  </aside>
+
+  <!-- ========== CHECKOUT MODAL ========== -->
+  <div id="checkout-modal" class="modal-overlay fixed inset-0 z-[80] flex items-center justify-center p-4">
+    <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 md:p-8">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="font-display text-xl font-bold text-brown-dark">Confirmar pedido</h3>
+        <button data-close-modal="checkout-modal" class="p-2 rounded-lg hover:bg-gray-100 transition" aria-label="Cerrar">
+          <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <form id="checkout-form">
+        <div class="mb-5">
+          <label for="customerName" class="block text-sm font-semibold text-brown-dark mb-2">Nombre completo</label>
+          <input type="text" id="customerName" name="customerName" required placeholder="Ej: Ana López"
+            class="w-full px-4 py-3 rounded-xl border border-amber-200 focus:border-honey focus:ring-2 focus:ring-honey/20 outline-none transition text-sm">
+        </div>
+        <p class="text-xs text-gray-500 mb-5">Tu pedido se registrará con estado <strong class="text-amber-700">Pendiente</strong> y podrás verlo en el panel de administración.</p>
+        <button type="submit" class="btn-primary w-full py-3.5 rounded-xl font-semibold text-sm">
+          Confirmar y enviar pedido
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========== REVIEW MODAL ========== -->
+  <div id="review-modal" class="modal-overlay fixed inset-0 z-[80] flex items-center justify-center p-4">
+    <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 md:p-8">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="font-display text-xl font-bold text-brown-dark">Escribir una reseña</h3>
+        <button data-close-modal="review-modal" class="p-2 rounded-lg hover:bg-gray-100 transition" aria-label="Cerrar">
+          <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <form id="review-form">
+        <div class="mb-4">
+          <label for="reviewName" class="block text-sm font-semibold text-brown-dark mb-2">Nombre</label>
+          <input type="text" id="reviewName" name="reviewName" required placeholder="Tu nombre"
+            class="w-full px-4 py-3 rounded-xl border border-amber-200 focus:border-honey focus:ring-2 focus:ring-honey/20 outline-none transition text-sm">
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-semibold text-brown-dark mb-2">Calificación</label>
+          <div id="star-rating-input" class="flex gap-1 text-2xl"></div>
+        </div>
+        <div class="mb-4">
+          <label for="reviewProduct" class="block text-sm font-semibold text-brown-dark mb-2">Producto</label>
+          <select id="reviewProduct" name="reviewProduct" required
+            class="w-full px-4 py-3 rounded-xl border border-amber-200 focus:border-honey focus:ring-2 focus:ring-honey/20 outline-none transition text-sm bg-white">
+          </select>
+        </div>
+        <div class="mb-5">
+          <label for="reviewComment" class="block text-sm font-semibold text-brown-dark mb-2">Comentario</label>
+          <textarea id="reviewComment" name="reviewComment" required rows="3" placeholder="Cuéntanos tu experiencia..."
+            class="w-full px-4 py-3 rounded-xl border border-amber-200 focus:border-honey focus:ring-2 focus:ring-honey/20 outline-none transition text-sm resize-none"></textarea>
+        </div>
+        <button type="submit" class="btn-primary w-full py-3.5 rounded-xl font-semibold text-sm">
+          Publicar reseña
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========== MIS COMPRAS MODAL ========== -->
+  <div id="orders-modal" class="modal-overlay fixed inset-0 z-[80] flex items-center justify-center p-4">
+    <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 md:p-8 max-h-[85vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="font-display text-xl font-bold text-brown-dark">Mis compras</h3>
+        <button data-close-modal="orders-modal" class="p-2 rounded-lg hover:bg-gray-100 transition" aria-label="Cerrar">
+          <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div id="my-orders-list" class="space-y-3"></div>
+    </div>
+  </div>
+
+  <!-- Toast container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/checkout.js"></script>
+  <script src="js/reviews.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

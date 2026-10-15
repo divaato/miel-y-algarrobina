@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dashboard de administración — Miel & Algarrobina Sullana">
+  <title>Dashboard | MIEL & ALGARROBINA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            honey: { DEFAULT: '#D4A017', light: '#F5B041' },
+            cream: { DEFAULT: '#FFF8E7' },
+            brown: { dark: '#3D2914', medium: '#5C4033' }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="css/styles.css">
+  <script>document.documentElement.classList.add('admin-checking');</script>
+</head>
+<body class="admin-body">
+
+  <!-- ========== ADMIN HEADER ========== -->
+  <header class="admin-header text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-3 mb-2">
+            <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
+              <svg class="w-6 h-6 text-honey-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            </div>
+            <div>
+              <h1 class="font-display text-2xl md:text-3xl font-bold">Dashboard de Administración</h1>
+              <p class="text-amber-200/70 text-sm mt-0.5">Control de pedidos y ventas</p>
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-wrap items-center gap-3 self-start">
+          <div class="px-4 py-2 rounded-xl bg-white/10 border border-white/20">
+            <p id="admin-user-badge" class="text-xs text-amber-200/80">Administrador autenticado</p>
+            <p id="admin-user-name" class="text-sm font-semibold">Cargando...</p>
+          </div>
+          <button id="admin-logout-btn" type="button" class="px-5 py-2.5 rounded-xl bg-white text-brown-dark text-sm font-semibold hover:bg-amber-50 transition">
+            Cerrar sesión
+          </button>
+          <a href="index.html" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-sm font-semibold transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+            Volver a la tienda
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10">
+
+    <!-- ========== STATS CARDS ========== -->
+    <section class="mb-10">
+      <div class="admin-stat-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+        <!-- Total -->
+        <div class="stat-card bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100">
+          <div class="flex items-center justify-between mb-4">
+            <div class="stat-icon bg-blue-50 text-blue-600">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+            </div>
+          </div>
+          <p id="stat-total" class="text-3xl font-bold text-gray-800">0</p>
+          <p class="text-sm text-gray-500 mt-1 font-medium">Pedidos totales</p>
+        </div>
+
+        <!-- Pendientes -->
+        <div class="stat-card bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100">
+          <div class="flex items-center justify-between mb-4">
+            <div class="stat-icon bg-amber-50 text-amber-600">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+          </div>
+          <p id="stat-pendientes" class="text-3xl font-bold text-amber-600">0</p>
+          <p class="text-sm text-gray-500 mt-1 font-medium">Pedidos pendientes</p>
+        </div>
+
+        <!-- Aprobados -->
+        <div class="stat-card bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100">
+          <div class="flex items-center justify-between mb-4">
+            <div class="stat-icon bg-green-50 text-green-600">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+          </div>
+          <p id="stat-aprobados" class="text-3xl font-bold text-green-600">0</p>
+          <p class="text-sm text-gray-500 mt-1 font-medium">Pedidos aprobados</p>
+        </div>
+
+        <!-- Anulados -->
+        <div class="stat-card bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100">
+          <div class="flex items-center justify-between mb-4">
+            <div class="stat-icon bg-red-50 text-red-600">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+          </div>
+          <p id="stat-anulados" class="text-3xl font-bold text-red-600">0</p>
+          <p class="text-sm text-gray-500 mt-1 font-medium">Pedidos anulados</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== ORDERS TABLE ========== -->
+    <section class="mb-10">
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="p-5 md:p-6 border-b border-gray-100">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <h2 class="font-display text-xl font-bold text-gray-800">Control de pedidos</h2>
+              <p class="text-sm text-gray-500 mt-1">Gestiona el estado de cada pedido recibido</p>
+            </div>
+            <!-- Filters -->
+            <div class="flex flex-wrap gap-2">
+              <button class="admin-filter-btn active px-4 py-2 rounded-lg text-xs font-semibold border border-gray-200 transition" data-filter="todos">Todos</button>
+              <button class="admin-filter-btn px-4 py-2 rounded-lg text-xs font-semibold border border-gray-200 transition" data-filter="pendientes">Pendientes</button>
+              <button class="admin-filter-btn px-4 py-2 rounded-lg text-xs font-semibold border border-gray-200 transition" data-filter="aprobados">Aprobados</button>
+              <button class="admin-filter-btn px-4 py-2 rounded-lg text-xs font-semibold border border-gray-200 transition" data-filter="anulados">Anulados</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-table-wrapper">
+          <table class="admin-table w-full">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">ID Pedido</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Cliente</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Productos</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Total</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Fecha</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Estado</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Acción</th>
+              </tr>
+            </thead>
+            <tbody id="orders-table-body">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <div id="orders-empty" class="hidden empty-state py-12">
+          <div class="empty-state-icon">📋</div>
+          <p class="font-medium text-gray-500">No hay pedidos con este filtro</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== RBAC / PERMISOS + RESEÑAS ========== -->
+    <div class="grid lg:grid-cols-3 gap-6 md:gap-8">
+
+      <!-- Control de permisos -->
+      <section class="lg:col-span-2">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-honey to-honey-light flex items-center justify-center">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            </div>
+            <div>
+              <h2 class="font-display text-xl font-bold text-gray-800">Control de permisos</h2>
+              <p class="text-sm text-gray-500">Permisos del rol Administrador</p>
+            </div>
+          </div>
+
+          <div class="grid sm:grid-cols-3 gap-4">
+            <!-- Pedidos -->
+            <div class="permission-card bg-gray-50 rounded-xl p-5">
+              <h3 class="font-semibold text-brown-dark mb-3 flex items-center gap-2">
+                <svg class="w-4 h-4 text-honey" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                PEDIDOS
+              </h3>
+              <div class="space-y-1">
+                <div class="permission-item">
+                  <svg class="permission-check w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                  <span class="text-sm text-gray-600">Puede revisar todos los pedidos.</span>
+                </div>
+                <div class="permission-item">
+                  <svg class="permission-check w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                  <span class="text-sm text-gray-600">Puede actualizar el estado del pedido.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Productos -->
+            <div class="permission-card bg-gray-50 rounded-xl p-5">
+              <h3 class="font-semibold text-brown-dark mb-3 flex items-center gap-2">
+                <svg class="w-4 h-4 text-honey" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                PRODUCTOS
+              </h3>
+              <div class="space-y-1">
+                <div class="permission-item">
+                  <svg class="permission-check w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                  <span class="text-sm text-gray-600">Puede registrar productos.</span>
+                </div>
+                <div class="permission-item">
+                  <svg class="permission-check w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                  <span class="text-sm text-gray-600">Puede modificar precios.</span>
+                </div>
+                <div class="permission-item">
+                  <svg class="permission-check w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                  <span class="text-sm text-gray-600">Puede actualizar stock.</span>
+                </div>
+                <div class="permission-item">
+                  <svg class="permission-check w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                  <span class="text-sm text-gray-600">Puede eliminar productos.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Reseñas -->
+            <div class="permission-card bg-gray-50 rounded-xl p-5">
+              <h3 class="font-semibold text-brown-dark mb-3 flex items-center gap-2">
+                <svg class="w-4 h-4 text-honey" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+                RESEÑAS
+              </h3>
+              <div class="space-y-1">
+                <div class="permission-item">
+                  <svg class="permission-check w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                  <span class="text-sm text-gray-600">Puede leer las opiniones.</span>
+                </div>
+                <div class="permission-item">
+                  <svg class="permission-check w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                  <span class="text-sm text-gray-600">Puede moderar/eliminar contenido inapropiado o spam.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Admin badge -->
+          <div class="mt-6 flex items-center gap-3 p-4 rounded-xl bg-gradient-to-r from-brown-dark to-brown-medium text-white">
+            <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center font-bold text-lg">A</div>
+            <div>
+              <p class="font-semibold text-sm">Rol activo: ADMINISTRADOR</p>
+              <p class="text-xs text-amber-200/70">Acceso completo al panel de control</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Reseñas recientes -->
+      <section>
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+          <h2 class="font-display text-lg font-bold text-gray-800 mb-4">Reseñas recientes</h2>
+          <div id="admin-reviews-list" class="space-y-3">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-200 bg-white mt-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center">
+      <p class="text-sm text-gray-400">© 2026 Miel & Algarrobina Sullana — Panel de Administración</p>
+    </div>
+  </footer>
+
+  <!-- Toast -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crear cuenta | MIEL & ALGARROBINA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            honey: { DEFAULT: '#D4A017', light: '#F5B041', warm: '#F9E076' },
+            cream: { DEFAULT: '#FFF8E7', dark: '#F5EDD6' },
+            brown: { dark: '#3D2914', medium: '#5C4033' }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="auth-page">
+
+  <div class="auth-layout min-h-screen grid lg:grid-cols-2">
+    <!-- Panel visual -->
+    <div class="auth-visual hidden lg:flex relative overflow-hidden hero-gradient items-center justify-center p-12 order-2 lg:order-1">
+      <div class="auth-honeycomb"></div>
+      <div class="hero-blob w-80 h-80 bg-honey-warm bottom-10 right-10"></div>
+      <div class="hero-blob w-72 h-72 bg-green-200 top-20 left-0"></div>
+      <div class="relative z-10 text-center max-w-md animate-fade-in-up">
+        <div class="hero-jar-group mx-auto mb-8" style="height:240px;max-width:260px">
+          <div class="absolute inset-6 rounded-full bg-gradient-to-br from-honey-warm to-honey opacity-80"></div>
+          <div class="hero-jar animate-float" style="left:50%;transform:translateX(-50%);top:10%;width:120px">
+            <div class="jar"><div class="jar-lid"></div><div class="jar-body"><div class="jar-liquid jar-liquid-honey"></div><div class="jar-label">Natural</div></div></div>
+          </div>
+          <svg class="decor-leaf animate-float-delay absolute" style="bottom:20%;left:15%;width:36px;height:36px" viewBox="0 0 24 24" fill="#7CB342"><path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1.06-2.44.94.5C9.81 18.17 12.26 17 17 17V8z"/></svg>
+          <div class="decor-honey-drop animate-float absolute" style="top:30%;right:20%"></div>
+        </div>
+        <h2 class="font-display text-2xl font-bold text-brown-dark mb-3">Únete a nuestra tienda</h2>
+        <p class="text-gray-600 leading-relaxed">Regístrate como cliente y disfruta de productos naturales de Sullana con compra sencilla y seguimiento transparente.</p>
+        <p class="mt-6 text-xs text-amber-800 bg-amber-50 inline-block px-4 py-2 rounded-full border border-amber-200">
+          Todos los registros reciben rol: Cliente
+        </p>
+      </div>
+    </div>
+
+    <!-- Formulario -->
+    <div class="flex items-center justify-center p-6 sm:p-10 bg-white order-1 lg:order-2">
+      <div class="auth-card w-full max-w-md animate-fade-in-up">
+        <div class="lg:hidden mb-8 text-center">
+          <a href="index.html" class="inline-flex items-center gap-2">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-honey to-honey-light flex items-center justify-center">
+              <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.5 2 6 4.5 6 8c0 2.5 1.5 4.5 3 6v8h6v-8c1.5-1.5 3-3.5 3-6 0-3.5-2.5-6-6-6z"/></svg>
+            </div>
+            <span class="font-display font-bold text-brown-dark">MIEL & ALGARROBINA</span>
+          </a>
+        </div>
+
+        <h1 class="font-display text-3xl font-bold text-brown-dark mb-2">Crear cuenta</h1>
+        <p class="text-gray-500 text-sm mb-8">Regístrate para comprar y dejar reseñas</p>
+
+        <div id="auth-config-warning" class="auth-alert auth-alert-error hidden mb-5" role="status"></div>
+        <div id="register-error" class="auth-alert auth-alert-error hidden mb-5" role="alert"></div>
+
+        <form id="register-form" class="space-y-4" novalidate>
+          <div>
+            <label for="nombre" class="auth-label">Nombre</label>
+            <input type="text" id="nombre" name="nombre" required autocomplete="name"
+              placeholder="Tu nombre completo"
+              class="auth-input">
+          </div>
+          <div>
+            <label for="email" class="auth-label">Correo electrónico</label>
+            <input type="email" id="email" name="email" required autocomplete="email"
+              placeholder="tu@correo.com"
+              class="auth-input">
+          </div>
+          <div>
+            <label for="password" class="auth-label">Contraseña</label>
+            <div class="auth-input-wrap">
+              <input type="password" id="password" name="password" required autocomplete="new-password"
+                placeholder="Mínimo 6 caracteres"
+                class="auth-input">
+              <button type="button" class="auth-toggle-pass" data-toggle-password="password">Ver</button>
+            </div>
+          </div>
+          <div>
+            <label for="confirmPassword" class="auth-label">Confirmar contraseña</label>
+            <div class="auth-input-wrap">
+              <input type="password" id="confirmPassword" name="confirmPassword" required autocomplete="new-password"
+                placeholder="Repite tu contraseña"
+                class="auth-input">
+              <button type="button" class="auth-toggle-pass" data-toggle-password="confirmPassword">Ver</button>
+            </div>
+          </div>
+          <button type="submit" id="register-submit" class="btn-primary w-full py-3.5 rounded-xl font-semibold text-sm mt-2">
+            Crear cuenta
+          </button>
+        </form>
+
+        <p class="text-center text-sm text-gray-500 mt-8">
+          ¿Ya tienes una cuenta?
+          <a href="login.html" class="text-amber-700 font-semibold hover:text-honey transition">Inicia sesión</a>
+        </p>
+
+        <p class="text-center mt-4">
+          <a href="index.html" class="text-xs text-gray-400 hover:text-amber-700 transition">← Volver a la tienda</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>
