@@ -434,11 +434,16 @@ async function processCheckout(e) {
   // 2. Calcular total
   const total = cart.reduce((sum, item) => sum + (item.price || item.precio || 0) * (item.quantity || item.cantidad || 1), 0);
 
-  // 3. Preparar los datos
+  // Obtener el método de pago seleccionado por el usuario
+  const paymentSelect = document.getElementById('paymentMethod');
+  const selectedPaymentMethod = paymentSelect ? paymentSelect.value : 'efectivo';
+
+  // 3. Preparar los datos con el método de pago
   const orderData = {
     cliente_nombre: customerName,
     cliente_email: user.email,
     total: total,
+    metodo_pago: selectedPaymentMethod,
     items: cart.map(item => ({
       id: item.id,
       nombre: item.name || item.nombre,
@@ -611,6 +616,16 @@ function setupEventListeners() {
   document.getElementById('cart-overlay')?.addEventListener('click', closeCart);
   document.getElementById('confirm-order-btn')?.addEventListener('click', confirmOrder);
   document.getElementById('checkout-form')?.addEventListener('submit', processCheckout);
+  // Mostrar u ocultar aviso de Culqi según el método de pago seleccionado
+  document.getElementById('paymentMethod')?.addEventListener('change', (e) => {
+    const notice = document.getElementById('culqi-notice');
+    if (!notice) return;
+    if (e.target.value === 'tarjeta' || e.target.value === 'yape') {
+      notice.classList.remove('hidden');
+    } else {
+      notice.classList.add('hidden');
+    }
+  });
   document.getElementById('review-form')?.addEventListener('submit', submitReview);
 
   document.getElementById('open-review-modal')?.addEventListener('click', async () => {

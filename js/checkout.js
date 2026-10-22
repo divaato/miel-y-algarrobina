@@ -24,6 +24,9 @@ async function processCheckoutSupabase(orderData) {
 
         const userId = user.id;
 
+        // Generar número de boleta virtual (Ejemplo: B001-839201)
+        const numeroComprobante = 'B001-' + String(Date.now()).slice(-6);
+
         // 3. Insertar el pedido principal en la tabla 'pedidos'
         const { data: orderResult, error: orderError } = await supabase
             .from('pedidos')
@@ -33,7 +36,9 @@ async function processCheckoutSupabase(orderData) {
                     cliente_nombre: orderData.cliente_nombre,
                     cliente_email: orderData.cliente_email,
                     total: orderData.total,
-                    estado: 'Pendiente'
+                    estado: 'Pendiente',
+                    metodo_pago: orderData.metodo_pago || 'efectivo',
+                    numero_comprobante: numeroComprobante
                 }
             ])
             .select();

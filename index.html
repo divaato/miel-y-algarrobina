@@ -360,12 +360,31 @@
         </button>
       </div>
       <form id="checkout-form">
-        <div class="mb-5">
+        <!-- Campo de Nombre -->
+        <div class="mb-4">
           <label for="customerName" class="block text-sm font-semibold text-brown-dark mb-2">Nombre completo</label>
           <input type="text" id="customerName" name="customerName" required placeholder="Ej: Ana López"
             class="w-full px-4 py-3 rounded-xl border border-amber-200 focus:border-honey focus:ring-2 focus:ring-honey/20 outline-none transition text-sm">
         </div>
-        <p class="text-xs text-gray-500 mb-5">Tu pedido se registrará con estado <strong class="text-amber-700">Pendiente</strong> y podrás verlo en el panel de administración.</p>
+
+        <!-- Selector de Método de Pago -->
+        <div class="mb-4">
+          <label for="paymentMethod" class="block text-sm font-semibold text-brown-dark mb-2">Método de pago</label>
+          <select id="paymentMethod" name="paymentMethod" required
+            class="w-full px-4 py-3 rounded-xl border border-amber-200 focus:border-honey focus:ring-2 focus:ring-honey/20 outline-none transition text-sm bg-white">
+            <option value="efectivo">Pago contra entrega / Transferencia</option>
+            <option value="tarjeta">Tarjeta de Crédito / Débito (Próximamente Culqi)</option>
+            <option value="yape">Yape (Próximamente Culqi)</option>
+          </select>
+        </div>
+
+        <!-- Aviso Informativo sobre Culqi -->
+        <div id="culqi-notice" class="hidden mb-4 p-3 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900 leading-relaxed">
+          ⚠️ <strong>Modo Integración:</strong> El pago en línea con Culqi se encuentra en fase de pruebas. Tu pedido se registrará como <strong class="text-amber-700">Pendiente</strong>.
+        </div>
+
+        <p class="text-xs text-gray-500 mb-5">Tu pedido se registrará con estado <strong class="text-amber-700">Pendiente</strong> y podrás visualizarlo en tu sección "Mis compras".</p>
+        
         <button type="submit" class="btn-primary w-full py-3.5 rounded-xl font-semibold text-sm">
           Confirmar y enviar pedido
         </button>
