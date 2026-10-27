@@ -1,6 +1,6 @@
 /**
- * MIEL & ALGARROBINA — Autenticación y roles (Sesión 03)
- * Supabase Auth + control de acceso por rol
+ * MIEL & ALGARROBINA — Autenticación y roles
+ * Supabase Auth + control de acceso por rol + Verificación por Enlace
  */
 
 const Auth = (() => {
@@ -101,19 +101,18 @@ const Auth = (() => {
 
   function translateAuthError(error) {
     const msg = (error?.message || '').toLowerCase();
-    const status = error?.status;
 
     if (msg.includes('failed to fetch') || msg.includes('network') || msg.includes('fetch')) {
-      return 'Error de conexión. Revisa tu internet o la URL de Supabase en config.js.';
+      return 'Error de conexión. Revisa tu internet o la URL de Supabase.';
     }
     if (msg.includes('invalid login credentials') || msg.includes('invalid credentials')) {
-      return 'Correo o contraseña incorrectos. Si el usuario no existe, regístrate primero.';
+      return 'Correo o contraseña incorrectos.';
     }
     if (msg.includes('user already registered') || msg.includes('already been registered')) {
-      return 'Este correo ya está registrado. Inicia sesión o usa otro correo.';
+      return 'Este correo ya está registrado. Inicia sesión.';
     }
     if (msg.includes('email not confirmed')) {
-      return 'Debes confirmar tu correo antes de iniciar sesión.';
+      return 'Debes confirmar tu correo (revisa tu bandeja de entrada o spam) antes de iniciar sesión.';
     }
     if (msg.includes('invalid email') || msg.includes('unable to validate email')) {
       return 'El formato del correo electrónico no es válido.';
@@ -162,10 +161,11 @@ const Auth = (() => {
     return true;
   }
 
+  // Registro de usuario
   async function signUp(nombre, email, password) {
     const client = getClient();
     if (!client) {
-      return { success: false, error: 'Supabase no está configurado. Revisa config.js' };
+      return { success: false, error: 'Supabase no está configurado.' };
     }
 
     const { data, error } = await client.auth.signUp({
@@ -178,37 +178,22 @@ const Auth = (() => {
       return { success: false, error: translateAuthError(error) };
     }
 
-    if (data.user && data.session) {
-      try {
-        await createProfile(data.user.id, nombre, email);
-      } catch (profileError) {
-        await signOut(false);
-        return {
-          success: false,
-          error: translateAuthError(profileError)
-        };
-      }
-    }
-
     cachedProfile = null;
     return { success: true, user: data.user, session: data.session };
   }
 
   async function signIn(email, password) {
     const client = getClient();
-    if (!client) {
-      return { success: false, error: 'Supabase no está configurado. Revisa config.js' };
-    }
+    if (!client) return { success: false, error: 'Supabase no está configurado.' };
 
     const { data, error } = await client.auth.signInWithPassword({ email, password });
 
-    if (error) {
-      return { success: false, error: translateAuthError(error) };
-    }
+    if (error) return { success: false, error: translateAuthError(error) };
 
     cachedProfile = null;
     let role = await getUserRole();
 
+    // Reparador de perfiles ausentes
     if (!role && data.user) {
       try {
         const nombre = data.user.user_metadata?.nombre || data.user.email.split('@')[0];
@@ -216,7 +201,7 @@ const Auth = (() => {
         cachedProfile = null;
         role = await getUserRole();
       } catch (profileError) {
-        console.error('[Auth] No se pudo crear el perfil:', profileError);
+        console.error('[Auth] No se pudo reparar el perfil:', profileError);
       }
     }
 
@@ -224,7 +209,7 @@ const Auth = (() => {
       await signOut(false);
       return {
         success: false,
-        error: 'Tu cuenta no tiene un perfil asignado. Ejecuta sql/schema.sql y vuelve a intentar.'
+        error: 'Tu cuenta no tiene un perfil asignado. Contacta a soporte.'
       };
     }
 
@@ -279,6 +264,18 @@ const Auth = (() => {
 
   async function initStoreAuthUI() {
     initSupabase();
+    const user = await getCurrentUser();
+    const profile = user ? await getUserProfile() : null;
+    
+    // Si entró por el link y no tiene perfil en la BD, lo creamos ahora
+    if (user && !profile) {
+       try {
+         const nombre = user.user_metadata?.nombre || user.email.split('@')[0];
+         await createProfile(user.id, nombre, user.email);
+       } catch(e) {
+         console.warn("Fallo creando perfil desde UI:", e);
+       }
+    }
 
     const guestEl = document.getElementById('auth-guest');
     const userEl = document.getElementById('auth-user');
@@ -289,8 +286,6 @@ const Auth = (() => {
     const mobileGreeting = document.getElementById('mobile-auth-greeting');
     const mobileLogout = document.getElementById('mobile-auth-logout');
 
-    const user = await getCurrentUser();
-    const profile = user ? await getUserProfile() : null;
     const displayName = profile?.nombre
       || user?.user_metadata?.nombre
       || (user?.email ? user.email.split('@')[0] : 'Cliente');
@@ -320,47 +315,7 @@ const Auth = (() => {
       signOut();
     });
 
-    const accessDenied = new URLSearchParams(window.location.search).get('acceso');
-    if (accessDenied === 'denegado' && typeof showToast === 'function') {
-      showToast('No tienes permiso para entrar al panel de administración.', 'warning');
-    }
-
     return profile;
-  }
-
-  async function initAdminAuthUI() {
-    const profile = await getUserProfile(true);
-    const nameEl = document.getElementById('admin-user-name');
-    const badgeEl = document.getElementById('admin-user-badge');
-    const logoutBtn = document.getElementById('admin-logout-btn');
-
-    if (profile && nameEl) {
-      nameEl.textContent = profile.nombre;
-    }
-    if (badgeEl) {
-      badgeEl.textContent = 'Administrador autenticado';
-    }
-
-    logoutBtn?.addEventListener('click', (e) => {
-      e.preventDefault();
-      signOut();
-    });
-  }
-
-  async function getProfileName() {
-    const profile = await getUserProfile();
-    return profile?.nombre || '';
-  }
-
-  function showConfigWarningIfNeeded() {
-    const box = document.getElementById('auth-config-warning');
-    if (!box) return;
-    if (isConfigured()) {
-      box.classList.add('hidden');
-      return;
-    }
-    box.classList.remove('hidden');
-    box.textContent = 'Falta configurar Supabase: abre config.js y coloca SUPABASE_URL y SUPABASE_ANON_KEY (clave pública anon).';
   }
 
   function setupAuthFormHandlers() {
@@ -371,13 +326,6 @@ const Auth = (() => {
     const loginSubmit = document.getElementById('login-submit');
     const registerSubmit = document.getElementById('register-submit');
 
-    showConfigWarningIfNeeded();
-
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('error') === 'config') {
-      showFormError(loginError || registerError, 'Configura SUPABASE_URL y SUPABASE_ANON_KEY en config.js para continuar.');
-    }
-
     loginForm?.addEventListener('submit', async (e) => {
       e.preventDefault();
       loginError?.classList.add('hidden');
@@ -385,26 +333,8 @@ const Auth = (() => {
       const email = loginForm.email.value.trim();
       const password = loginForm.password.value;
 
-      if (!email && !password) {
-        showFormError(loginError, 'Completa el correo electrónico y la contraseña.');
-        return;
-      }
-      if (!email) {
-        showFormError(loginError, 'Ingresa tu correo electrónico.');
-        return;
-      }
-      if (!password) {
-        showFormError(loginError, 'Ingresa tu contraseña.');
-        return;
-      }
-
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        showFormError(loginError, 'El correo electrónico no es válido.');
-        return;
-      }
-
-      if (!isConfigured()) {
-        showFormError(loginError, 'Supabase no está configurado. Completa config.js con la URL y la clave anon.');
+      if (!email || !password) {
+        showFormError(loginError, 'Completa el correo y la contraseña.');
         return;
       }
 
@@ -445,28 +375,13 @@ const Auth = (() => {
         return;
       }
 
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        showFormError(registerError, 'Ingresa un correo electrónico válido.');
-        return;
-      }
-
-      if (password.length < 6) {
-        showFormError(registerError, 'La contraseña debe tener al menos 6 caracteres.');
-        return;
-      }
-
       if (password !== confirm) {
         showFormError(registerError, 'Las contraseñas no coinciden.');
         return;
       }
 
-      if (!isConfigured()) {
-        showFormError(registerError, 'Supabase no está configurado. Completa config.js con la URL y la clave anon.');
-        return;
-      }
-
       registerSubmit.disabled = true;
-      registerSubmit.textContent = 'Creando cuenta...';
+      registerSubmit.textContent = 'Procesando...';
 
       initSupabase();
       const result = await signUp(nombre, email, password);
@@ -479,15 +394,11 @@ const Auth = (() => {
         return;
       }
 
-      if (result.session) {
-        redirectByRole(ROLES.CLIENTE);
-      } else {
-        showFormError(
-          registerError,
-          'Cuenta creada. Revisa tu correo para confirmar la cuenta o desactiva la confirmación en Supabase.',
-          'success'
-        );
-      }
+      // Mostrar mensaje de éxito en lugar del modal
+      showFormError(registerError, '¡Registro exitoso! En espera de verificación. Por favor, revisa tu correo electrónico (y spam) y haz clic en el enlace para activar tu cuenta.', 'success');
+      
+      // Limpiar el formulario
+      registerForm.reset();
     });
 
     document.querySelectorAll('[data-toggle-password]').forEach((btn) => {
@@ -523,8 +434,6 @@ const Auth = (() => {
     protectPage,
     protectAdminPage,
     initStoreAuthUI,
-    initAdminAuthUI,
-    getProfileName,
     setupAuthFormHandlers,
     isConfigured
   };
@@ -540,7 +449,19 @@ document.addEventListener('DOMContentLoaded', () => {
     Auth.getSession().then(async (session) => {
       if (!session) return;
       const role = await Auth.getUserRole();
-      if (role) Auth.redirectByRole(role);
+      
+      // Si fue verificado por el link pero no tiene rol/perfil, crearlo:
+      if (!role && session.user) {
+        try {
+          const client = Auth.initSupabase();
+          const { data: rolData } = await client.from('roles').select('id').eq('nombre', 'Cliente').single();
+          const nombre = session.user.user_metadata?.nombre || session.user.email.split('@')[0];
+          await client.from('perfiles').insert({ id: session.user.id, nombre, email: session.user.email, rol_id: rolData.id });
+          Auth.redirectByRole('Cliente');
+        } catch(e) {}
+      } else if (role) {
+        Auth.redirectByRole(role);
+      }
     });
   }
 });
