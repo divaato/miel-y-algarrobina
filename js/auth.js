@@ -56,6 +56,23 @@ const Auth = (() => {
     return session?.user ?? null;
   }
 
+  // Nombre para autocompletar formularios (checkout, reseñas)
+  async function getProfileName() {
+    try {
+      const user = await getCurrentUser();
+      if (!user) return '';
+      const profile = await getUserProfile();
+      return (
+        profile?.nombre ||
+        user.user_metadata?.nombre ||
+        (user.email ? user.email.split('@')[0] : '')
+      );
+    } catch (e) {
+      console.warn('[Auth] No se pudo obtener el nombre del perfil:', e);
+      return '';
+    }
+  }
+
   async function getUserProfile(forceRefresh = false) {
     const user = await getCurrentUser();
     if (!user) {
@@ -428,6 +445,7 @@ const Auth = (() => {
     getSession,
     getCurrentUser,
     getUserProfile,
+    getProfileName,
     getUserRole,
     redirectByRole,
     requireAuth,

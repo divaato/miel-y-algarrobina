@@ -399,9 +399,13 @@ async function confirmOrder() {
   }
 
   const nameInput = document.getElementById('customerName');
-  if (nameInput && window.Auth) {
-    const profileName = await Auth.getProfileName();
-    if (profileName && !nameInput.value) nameInput.value = profileName;
+  if (nameInput && window.Auth && typeof Auth.getProfileName === 'function') {
+    try {
+      const profileName = await Auth.getProfileName();
+      if (profileName && !nameInput.value) nameInput.value = profileName;
+    } catch (err) {
+      console.warn('[Checkout] No se pudo autocompletar el nombre:', err);
+    }
   }
 
   openModal('checkout-modal');
