@@ -16,7 +16,8 @@ const PRODUCTS = [
     stock: 45,
     visual: 'product-visual-miel',
     liquid: 'jar-liquid-honey',
-    label: 'Miel Sullana'
+    label: 'Miel Sullana',
+    image: 'assets/img/productos/miel.jpg'
   },
   {
     id: 'miel-familiar',
@@ -28,7 +29,8 @@ const PRODUCTS = [
     stock: 28,
     visual: 'product-visual-miel-familiar',
     liquid: 'jar-liquid-honey',
-    label: 'Miel Familiar'
+    label: 'Miel Familiar',
+    image: 'assets/img/productos/miel.jpg'
   },
   {
     id: 'algarrobina-natural',
@@ -40,7 +42,8 @@ const PRODUCTS = [
     stock: 32,
     visual: 'product-visual-algarrobina',
     liquid: 'jar-liquid-algarrobina',
-    label: 'Algarrobina'
+    label: 'Algarrobina',
+    image: 'assets/img/productos/algarrobina.jpg'
   },
   {
     id: 'algarrobina-familiar',
@@ -52,7 +55,8 @@ const PRODUCTS = [
     stock: 20,
     visual: 'product-visual-algarrobina-familiar',
     liquid: 'jar-liquid-algarrobina',
-    label: 'Alg. Familiar'
+    label: 'Alg. Familiar',
+    image: 'assets/img/productos/algarrobina.jpg'
   },
   {
     id: 'combo-dulzura',
@@ -64,7 +68,8 @@ const PRODUCTS = [
     stock: 15,
     visual: 'product-visual-combo',
     liquid: 'jar-liquid-honey',
-    label: 'Combo'
+    label: 'Combo',
+    images: ['assets/img/productos/miel.jpg', 'assets/img/productos/algarrobina.jpg']
   },
   {
     id: 'miel-organica',
@@ -76,7 +81,8 @@ const PRODUCTS = [
     stock: 12,
     visual: 'product-visual-organico',
     liquid: 'jar-liquid-honey',
-    label: 'Orgánica'
+    label: 'Orgánica',
+    image: 'assets/img/productos/miel.jpg'
   }
 ];
 
@@ -130,6 +136,22 @@ function createJarHTML(visual, liquid, label, size = 'normal') {
   `;
 }
 
+function createProductVisualHTML(product) {
+  if (product.images) {
+    return `
+      <div class="product-photo-duo">
+        ${product.images.map(src => `<img src="${src}" alt="${product.name}" width="600" height="800" loading="lazy" class="product-photo">`).join('')}
+      </div>
+    `;
+  }
+
+  if (product.image) {
+    return `<img src="${product.image}" alt="${product.name}" width="600" height="800" loading="lazy" class="product-photo">`;
+  }
+
+  return createJarHTML(product.visual, product.liquid, product.label);
+}
+
 function renderProducts() {
   const grid = document.getElementById('product-grid');
   if (!grid) return;
@@ -150,8 +172,8 @@ function renderProducts() {
 
   grid.innerHTML = filtered.map(product => `
     <article class="product-card bg-white rounded-2xl overflow-hidden shadow-md border border-amber-100/50 flex flex-col" data-id="${product.id}">
-      <div class="product-visual ${product.visual} p-6">
-        ${createJarHTML(product.visual, product.liquid, product.label)}
+      <div class="product-visual ${product.image || product.images ? 'product-visual-photo' : product.visual + ' p-6'}">
+        ${createProductVisualHTML(product)}
       </div>
       <div class="p-5 flex flex-col flex-grow">
         <div class="flex items-center justify-between mb-2">

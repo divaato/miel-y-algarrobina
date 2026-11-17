@@ -327,6 +327,20 @@ const Auth = (() => {
     return profile;
   }
 
+  async function initAdminAuthUI() {
+    const nameEl = document.getElementById('admin-user-name');
+    const logoutBtn = document.getElementById('admin-logout-btn');
+
+    if (nameEl) {
+      nameEl.textContent = (await getProfileName()) || 'Administrador';
+    }
+
+    logoutBtn?.addEventListener('click', (e) => {
+      e.preventDefault();
+      signOut();
+    });
+  }
+
   function setupAuthFormHandlers() {
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
@@ -442,6 +456,7 @@ const Auth = (() => {
     protectPage,
     protectAdminPage,
     initStoreAuthUI,
+    initAdminAuthUI,
     setupAuthFormHandlers,
     isConfigured
   };

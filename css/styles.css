@@ -856,3 +856,31 @@ html.admin-checking body {
   margin-bottom: 1rem;
   opacity: 0.5;
 }
+
+.product-visual-photo {
+  background: #ffffff;
+}
+
+.product-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+
+.product-photo-duo {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-photo-duo .product-photo {
+  width: 58%;
+  height: 92%;
+}
+
+.product-photo-duo .product-photo + .product-photo {
+  margin-left: -14%;
+}
