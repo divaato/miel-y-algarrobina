@@ -1,8 +1,3 @@
-/**
- * MIEL & ALGARROBINA — Autenticación y roles
- * Supabase Auth + control de acceso por rol + Verificación por Enlace
- */
-
 const Auth = (() => {
   const ROLES = {
     CLIENTE: 'Cliente',
@@ -56,7 +51,6 @@ const Auth = (() => {
     return session?.user ?? null;
   }
 
-  // Nombre para autocompletar formularios (checkout, reseñas)
   async function getProfileName() {
     try {
       const user = await getCurrentUser();
@@ -178,7 +172,6 @@ const Auth = (() => {
     return true;
   }
 
-  // Registro de usuario
   async function signUp(nombre, email, password) {
     const client = getClient();
     if (!client) {
@@ -210,7 +203,6 @@ const Auth = (() => {
     cachedProfile = null;
     let role = await getUserRole();
 
-    // Reparador de perfiles ausentes
     if (!role && data.user) {
       try {
         const nombre = data.user.user_metadata?.nombre || data.user.email.split('@')[0];
@@ -411,10 +403,8 @@ const Auth = (() => {
         return;
       }
 
-      // Mostrar mensaje de éxito en lugar del modal
       showFormError(registerError, '¡Registro exitoso! En espera de verificación. Por favor, revisa tu correo electrónico (y spam) y haz clic en el enlace para activar tu cuenta.', 'success');
       
-      // Limpiar el formulario
       registerForm.reset();
     });
 

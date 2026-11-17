@@ -1,8 +1,3 @@
-/**
- * MIEL & ALGARROBINA — Tienda Virtual
- * app.js — Lógica de la vista pública con Supabase
- */
-
 const STORAGE_KEYS = {
   cart: 'mielAlgarrobina_cart',
   orders: 'mielAlgarrobina_orders',
@@ -199,7 +194,6 @@ function renderStars(rating, interactive = false) {
   return html;
 }
 
-// Cargar y mostrar reseñas desde Supabase
 async function renderReviews() {
   const container = document.getElementById('reviews-grid');
   if (!container) return;
@@ -220,7 +214,6 @@ async function renderReviews() {
   container.innerHTML = reviews.map(review => {
     let rawName = review.cliente_nombre || 'Cliente';
     
-    // Si viene un correo, extraemos solo la parte antes del @ y capitalizamos la primera letra
     if (rawName.includes('@')) {
       rawName = rawName.split('@')[0];
       rawName = rawName.charAt(0).toUpperCase() + rawName.slice(1);
@@ -411,7 +404,6 @@ async function confirmOrder() {
   openModal('checkout-modal');
 }
 
-// Procesar el Checkout en Supabase
 async function processCheckout(e) {
   if (e) e.preventDefault();
 
@@ -424,7 +416,6 @@ async function processCheckout(e) {
     return;
   }
 
-  // 1. Obtener usuario de la sesión
   let user = null;
   if (window.Auth && typeof Auth.getCurrentUser === 'function') {
     user = await Auth.getCurrentUser();
@@ -435,14 +426,11 @@ async function processCheckout(e) {
     return;
   }
 
-  // 2. Calcular total
   const total = cart.reduce((sum, item) => sum + (item.price || item.precio || 0) * (item.quantity || item.cantidad || 1), 0);
 
-  // Obtener el método de pago seleccionado por el usuario
   const paymentSelect = document.getElementById('paymentMethod');
   const selectedPaymentMethod = paymentSelect ? paymentSelect.value : 'efectivo';
 
-  // 3. Preparar los datos con el método de pago
   const orderData = {
     cliente_nombre: customerName,
     cliente_email: user.email,
@@ -456,7 +444,6 @@ async function processCheckout(e) {
     }))
   };
 
-  // 4. Enviar a Supabase mediante checkout.js
   const result = await processCheckoutSupabase(orderData);
 
   if (!result.success) {
@@ -464,7 +451,6 @@ async function processCheckout(e) {
     return;
   }
 
-  // 5. Limpiar carrito y cerrar modal
   cart = [];
   if (typeof setStorage === 'function' && typeof STORAGE_KEYS !== 'undefined') {
     setStorage(STORAGE_KEYS.cart, cart);
@@ -477,7 +463,6 @@ async function processCheckout(e) {
 
   if (form) form.reset();
 
-  // 6. Mensaje de éxito
   if (typeof showToast === 'function') {
     showToast(`¡Pedido #${result.orderId} confirmado! Estado: Pendiente`, 'success');
   }
@@ -485,7 +470,6 @@ async function processCheckout(e) {
   console.log('[Compra] Pedido guardado en Supabase con ID:', result.orderId);
 }
 
-// Enviar reseña a Supabase
 async function submitReview(e) {
   e.preventDefault();
 
@@ -620,7 +604,6 @@ function setupEventListeners() {
   document.getElementById('cart-overlay')?.addEventListener('click', closeCart);
   document.getElementById('confirm-order-btn')?.addEventListener('click', confirmOrder);
   document.getElementById('checkout-form')?.addEventListener('submit', processCheckout);
-  // Mostrar u ocultar aviso de Culqi según el método de pago seleccionado
   document.getElementById('paymentMethod')?.addEventListener('change', (e) => {
     const notice = document.getElementById('culqi-notice');
     if (!notice) return;
@@ -692,7 +675,6 @@ async function renderMyOrders() {
   const supabase = Auth.initSupabase();
   if (!supabase) return;
 
-  // Obtener pedidos directamente de Supabase
   const { data: mine, error } = await supabase
     .from('pedidos')
     .select('*')
@@ -753,7 +735,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   updateStarInputs();
   setupAuthStoreActions();
 
-  // Suscripción en tiempo real a nuevas reseñas
   if (typeof subscribeReviewsRealtime === 'function') {
     subscribeReviewsRealtime(() => {
       renderReviews();

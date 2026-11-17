@@ -1,5 +1,5 @@
 -- ============================================================
--- MIEL & ALGARROBINA — Schema Supabase (Sesión 03)
+-- Naturalmente dulce — Schema Supabase
 -- Ejecutar en: Supabase Dashboard → SQL Editor → New query
 --
 -- ORDEN RECOMENDADO:

@@ -1,17 +1,9 @@
-// js/reviews.js
-
-/**
- * Función auxiliar para obtener el cliente de Supabase
- */
 function getSupabaseClient() {
     return (window.Auth && typeof Auth.initSupabase === 'function') 
         ? Auth.initSupabase() 
         : window.supabase;
 }
 
-/**
- * Obtiene todas las reseñas almacenadas en Supabase
- */
 async function fetchReviewsSupabase() {
     try {
         const supabase = getSupabaseClient();
@@ -30,9 +22,6 @@ async function fetchReviewsSupabase() {
     }
 }
 
-/**
- * Inserta una nueva reseña en Supabase
- */
 async function addReviewSupabase(comentario, calificacion) {
     try {
         const supabase = getSupabaseClient();
@@ -65,10 +54,6 @@ async function addReviewSupabase(comentario, calificacion) {
     }
 }
 
-/**
- * Suscribe la página a cambios en tiempo real en la tabla 'reseñas'
- * @param {Function} onNewReview - Función Callback que se ejecuta cuando llega una nueva reseña
- */
 function subscribeReviewsRealtime(onNewReview) {
     const supabase = getSupabaseClient();
     if (!supabase) return;

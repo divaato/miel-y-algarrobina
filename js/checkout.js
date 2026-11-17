@@ -1,13 +1,5 @@
-// js/checkout.js
-
-/**
- * Registra un pedido y sus detalles de forma asíncrona en Supabase
- * @param {Object} orderData - Datos del pedido (cliente, email, total, items)
- * @returns {Promise<Object>} Resultado de la operación { success: boolean, orderId?: number, error?: string }
- */
 async function processCheckoutSupabase(orderData) {
     try {
-        // 1. Obtener cliente de Supabase
         const supabase = (window.Auth && typeof Auth.initSupabase === 'function') 
             ? Auth.initSupabase() 
             : window.supabase;
@@ -16,7 +8,6 @@ async function processCheckoutSupabase(orderData) {
             throw new Error("No se pudo inicializar la conexión con Supabase.");
         }
 
-        // 2. Obtener la sesión activa del usuario
         const user = await Auth.getCurrentUser();
         if (!user) {
             throw new Error("Debes iniciar sesión para realizar un pedido.");
@@ -27,7 +18,6 @@ async function processCheckoutSupabase(orderData) {
         // Generar número de boleta virtual (Ejemplo: B001-839201)
         const numeroComprobante = 'B001-' + String(Date.now()).slice(-6);
 
-        // 3. Insertar el pedido principal en la tabla 'pedidos'
         const { data: orderResult, error: orderError } = await supabase
             .from('pedidos')
             .insert([
@@ -47,7 +37,6 @@ async function processCheckoutSupabase(orderData) {
 
         const newOrder = orderResult[0];
 
-        // 4. Preparar los items para la tabla 'detalle_pedidos'
         const orderDetails = orderData.items.map(item => ({
             pedido_id: newOrder.id,
             producto_id: item.id,
@@ -56,7 +45,6 @@ async function processCheckoutSupabase(orderData) {
             precio: item.precio
         }));
 
-        // 5. Insertar todos los detalles del pedido
         const { error: detailsError } = await supabase
             .from('detalle_pedidos')
             .insert(orderDetails);

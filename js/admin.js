@@ -1,19 +1,9 @@
-/**
- * MIEL & ALGARROBINA — Dashboard de Administración
- * admin.js — Lógica del panel admin
- * Sesión 05 — Pedidos sincronizados con Supabase
- */
-
 const STORAGE_KEYS = {
   reviews: 'mielAlgarrobina_reviews'
 };
 
 let currentFilter = 'todos';
 let orders = [];
-
-/* ============================================
-   FORMATO
-============================================ */
 
 function formatPrice(amount) {
   return `S/ ${Number(amount || 0).toFixed(2)}`;
@@ -53,10 +43,6 @@ function getStatusIcon(status) {
   return map[status] || '•';
 }
 
-/* ============================================
-   SUPABASE
-============================================ */
-
 function getSupabase() {
   if (!window.Auth) {
     console.error('[Admin] Auth no está disponible.');
@@ -72,10 +58,6 @@ function getSupabase() {
 
   return client;
 }
-
-/* ============================================
-   CARGAR PEDIDOS DESDE SUPABASE
-============================================ */
 
 async function loadOrders() {
   const supabase = getSupabase();
@@ -147,10 +129,6 @@ async function loadOrders() {
   }
 }
 
-/* ============================================
-   FILTROS
-============================================ */
-
 function getFilteredOrders() {
   if (currentFilter === 'todos') {
     return orders;
@@ -166,10 +144,6 @@ function getFilteredOrders() {
     order => order.status === statusMap[currentFilter]
   );
 }
-
-/* ============================================
-   ESTADÍSTICAS
-============================================ */
 
 function updateStats() {
   const total = orders.length;
@@ -227,10 +201,6 @@ function animateCounter(elementId, target) {
 
   requestAnimationFrame(step);
 }
-
-/* ============================================
-   MOSTRAR PEDIDOS
-============================================ */
 
 function renderOrdersTable() {
   const tbody = document.getElementById('orders-table-body');
@@ -425,10 +395,6 @@ function renderOrdersTable() {
     });
 }
 
-/* ============================================
-   ACTUALIZAR ESTADO EN SUPABASE
-============================================ */
-
 async function updateOrderStatus(orderId, newStatus) {
 
   const supabase = getSupabase();
@@ -520,10 +486,6 @@ async function updateOrderStatus(orderId, newStatus) {
   }
 }
 
-/* ============================================
-   TOAST
-============================================ */
-
 function showToast(message, type = 'success') {
 
   const container =
@@ -561,10 +523,6 @@ function showToast(message, type = 'success') {
   }, 3000);
 }
 
-/* ============================================
-   FILTROS
-============================================ */
-
 function setupFilters() {
 
   document
@@ -590,10 +548,6 @@ function setupFilters() {
 
     });
 }
-
-/* ============================================
-   RESEÑAS
-============================================ */
 
 function getStorage(key, fallback) {
 
@@ -686,10 +640,6 @@ function renderReviewsAdmin() {
       `)
       .join('');
 }
-
-/* ============================================
-   INICIO DEL DASHBOARD
-============================================ */
 
 document.addEventListener(
   'DOMContentLoaded',
